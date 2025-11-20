@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Engineering Portfolio - SolidWorks, ANSYS, and CAD Projects">
+    <title>Engineering Portfolio | Timberlis</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- React and ReactDOM CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Custom Cursor Elements -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- Background Grid -->
+    <div class="grid-background"></div>
+
+    <!-- React Root -->
+    <div id="root"></div>
+
+    <!-- React Application -->
+    <script type="text/babel">
+        // Custom Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+
+            cursorDot.style.left = `${clientX}px`;
+            cursorDot.style.top = `${clientY}px`;
+
+            cursorOutline.animate({
+                left: `${clientX}px`,
+                top: `${clientY}px`
+            }, { duration: 300, fill: 'forwards' });
+        });
+
+        // Hover effect for interactive elements
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest('button, a, .project-card, .social-link, .stat-card')) {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.borderColor = '#f97316';
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest('button, a, .project-card, .social-link, .stat-card')) {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.borderColor = '#06b6d4';
+            }
+        });
+
+        // Initialize Lucide icons after React renders
+        setTimeout(() => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }, 100);
+
+        // ============================================
+        // REACT COMPONENTS
+        // ============================================
+
+        const { useState, useEffect } = React;
+
+        // ========== PROFILE DATA ==========
+        // EDIT YOUR PERSONAL INFORMATION HERE
+        const profileData = {
+            name: "Timberlis",
+            title: "Mechanical Engineer | CAD Specialist",
+            bio: "Passionate mechanical engineer specializing in SolidWorks, ANSYS, and advanced CAD design. I transform complex engineering challenges into elegant solutions through precision modeling and simulation.",
+            email: "timberlis@example.com",
+            phone: "+1 234 567 8900",
+            location: "City, Country",
+            profileImage: "", // Leave empty for placeholder, or add path to your image
+            socialLinks: {
+                linkedin: "https://linkedin.com/in/yourprofile",
+                github: "https://github.com/yourprofile",
+                twitter: "https://twitter.com/yourprofile"
+            }
+        };
+
+        // ========== PROJECTS DATA ==========
+        // ADD YOUR PROJECTS HERE - Just duplicate the object structure below
+        const projectsData = [
+            {
+                id: 1,
+                title: "Industrial Gearbox Assembly",
+                description: "Designed a high-performance industrial gearbox assembly for heavy machinery applications. The project involved detailed stress analysis, thermal simulation, and optimization for maximum torque transfer efficiency. Utilized advanced meshing techniques and material selection to ensure longevity under extreme operating conditions.",
+                software: "SolidWorks",
+                duration: "3 weeks",
+                image: "",
+                thumbnail: ""
+            },
+            {
+                id: 2,
+                title: "Turbine Blade CFD Analysis",
+                description: "Conducted comprehensive computational fluid dynamics analysis on a wind turbine blade design. The simulation focused on optimizing aerodynamic efficiency, reducing drag coefficients, and maximizing power generation across varying wind speeds.",
+                software: "ANSYS",
+                duration: "2 weeks",
+                image: "",
+                thumbnail: ""
+            },
+            {
+                id: 3,
+                title: "Robotic Arm Mechanism",
+                description: "Developed a 6-axis robotic arm with precision motion control for industrial automation. The design includes sophisticated joint mechanisms, actuator placement optimization, and kinematic analysis for achieving sub-millimeter precision in pick-and-place operations.",
+                software: "SolidWorks",
+                duration: "4 weeks",
+                image: "",
+                thumbnail: ""
+            },
+            {
+                id: 4,
+                title: "Heat Exchanger Optimization",
+                description: "Thermal analysis and optimization of a shell-and-tube heat exchanger for industrial cooling systems. Performed heat transfer simulations and pressure drop calculations to maximize efficiency.",
+                software: "ANSYS",
+                duration: "1 week",
+                image: "",
+                thumbnail: ""
+            },
+            {
+                id: 5,
+                title: "Suspension System Design",
+                description: "Complete suspension system design for an off-road vehicle, including spring rates, damper tuning, and kinematic analysis for optimal ride comfort and handling characteristics.",
+                software: "SolidWorks",
+                duration: "3 weeks",
+                image: "",
+                thumbnail: ""
+            },
+            {
+                id: 6,
+                title: "Structural Frame Analysis",
+                description: "Finite element analysis of a steel structural frame for a manufacturing facility. Evaluated load-bearing capacity, deflection limits, and safety factors under various loading conditions.",
+                software: "ANSYS",
+                duration: "2 weeks",
+                image: "",
+                thumbnail: ""
+            },
+            {
+                id: 7,
+                title: "Hydraulic Cylinder Design",
+                description: "Design and analysis of a heavy-duty hydraulic cylinder for construction equipment. Included seal selection, pressure vessel calculations, and fatigue life assessment.",
+                software: "SolidWorks",
+                duration: "1.5 weeks",
+                image: "",
+                thumbnail: ""
+            },
+        ];
+
+        // ========== PROFILE SECTION COMPONENT ==========
+        function ProfileSection() {
+            return (
+                <div className="profile-section">
+                    <div className="profile-content">
+                        <h1>{profileData.name}</h1>
+                        <div className="title">{profileData.title}</div>
+                        <p className="bio">{profileData.bio}</p>
+
+                        <div className="profile-info">
+                            <div className="info-item">
+                                <i data-lucide="mail"></i>
+                                <span>{profileData.email}</span>
+                            </div>
+                            <div className="info-item">
+                                <i data-lucide="phone"></i>
+                                <span>{profileData.phone}</span>
+                            </div>
+                            <div className="info-item">
+                                <i data-lucide="map-pin"></i>
+                                <span>{profileData.location}</span>
+                            </div>
+                        </div>
+
+                        <div className="social-links">
+                            <a href={profileData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">
+                                <i data-lucide="linkedin"></i>
+                            </a>
+                            <a href={profileData.socialLinks.github} target="_blank" rel="noopener noreferrer" className="social-link">
+                                <i data-lucide="github"></i>
+                            </a>
+                            <a href={profileData.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="social-link">
+                                <i data-lucide="twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="profile-image-container">
+                        <div className="profile-accent accent-1"></div>
+                        <div className="profile-accent accent-2"></div>
+                        <div className="profile-image-wrapper">
+                            {profileData.profileImage ? (
+                                <img src={profileData.profileImage} alt={profileData.name} className="profile-image" />
+                            ) : (
+                                <div className="image-placeholder">
+                                    <i data-lucide="user"></i>
+                                    <span>Add your photo</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ========== PROJECT CARD COMPONENT ==========
+        function ProjectCard({ project, onClick }) {
+            return (
+                <div className="project-card" onClick={() => onClick(project)} style={{ animationDelay: `${project.id * 0.1}s` }}>
+                    <div className="project-thumbnail">
+                        {project.image || project.thumbnail ? (
+                            <img src={project.thumbnail || project.image} alt={project.title} />
+                        ) : (
+                            <div className="thumbnail-placeholder">
+                                <i data-lucide="box"></i>
+                                <span>Add project image</span>
+                            </div>
+                        )}
+                        <div className="software-badge">
+                            <i data-lucide="cpu"></i>
+                            {project.software}
+                        </div>
+                    </div>
+
+                    <div className="project-info">
+                        <h3>{project.title}</h3>
+                        <div className="project-meta">
+                            <div className="meta-item">
+                                <i data-lucide="clock"></i>
+                                <span>{project.duration}</span>
+                            </div>
+                            <div className="meta-item">
+                                <i data-lucide="layers"></i>
+                                <span>{project.software}</span>
+                            </div>
+                        </div>
+                        <p>{project.description.substring(0, 120)}...</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // ========== PROJECT MODAL COMPONENT ==========
+        function ProjectModal({ project, onClose }) {
+            if (!project) return null;
+
+            useEffect(() => {
+                // Close modal on ESC key
+                const handleEscape = (e) => {
+                    if (e.key === 'Escape') onClose();
+                };
+                document.addEventListener('keydown', handleEscape);
+
+                // Reinitialize icons
+                setTimeout(() => {
+                    if (window.lucide) lucide.createIcons();
+                }, 50);
+
+                return () => document.removeEventListener('keydown', handleEscape);
+            }, [onClose]);
+
+            return (
+                <div className="modal-overlay active" onClick={onClose}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={onClose}>
+                            <i data-lucide="x"></i>
+                        </button>
+
+                        <div className="modal-image-container">
+                            {project.image ? (
+                                <img src={project.image} alt={project.title} />
+                            ) : (
+                                <div className="thumbnail-placeholder">
+                                    <i data-lucide="image" style={{ fontSize: '5rem' }}></i>
+                                    <span style={{ fontSize: '1.2rem' }}>Add project image</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="modal-details">
+                            <h2>{project.title}</h2>
+
+                            <div className="modal-meta">
+                                <div className="modal-meta-item">
+                                    <div className="modal-meta-label">Software Used</div>
+                                    <div className="modal-meta-value">
+                                        <i data-lucide="cpu"></i>
+                                        {project.software}
+                                    </div>
+                                </div>
+
+                                <div className="modal-meta-item">
+                                    <div className="modal-meta-label">Total Duration</div>
+                                    <div className="modal-meta-value">
+                                        <i data-lucide="clock"></i>
+                                        {project.duration}
+                                    </div>
+                                </div>
+
+                                <div className="modal-meta-item">
+                                    <div className="modal-meta-label">Project ID</div>
+                                    <div className="modal-meta-value">
+                                        <i data-lucide="hash"></i>
+                                        {String(project.id).padStart(3, '0')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="modal-description">
+                                <p>{project.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ========== PROJECTS GALLERY COMPONENT ==========
+        function ProjectsGallery() {
+            const [displayCount, setDisplayCount] = useState(6);
+            const [selectedProject, setSelectedProject] = useState(null);
+
+            const visibleProjects = projectsData.slice(0, displayCount);
+            const hasMore = displayCount < projectsData.length;
+
+            const handleShowMore = () => {
+                setDisplayCount(prev => Math.min(prev + 6, projectsData.length));
+            };
+
+            useEffect(() => {
+                // Reinitialize Lucide icons when projects are rendered
+                setTimeout(() => {
+                    if (window.lucide) lucide.createIcons();
+                }, 100);
+            }, [displayCount]);
+
+            return (
+                <>
+                    <div className="section-header">
+                        <h2 className="section-title">Featured Projects</h2>
+                        <p className="section-subtitle">Engineering excellence through design & analysis</p>
+                    </div>
+
+                    <div className="projects-grid">
+                        {visibleProjects.map(project => (
+                            <ProjectCard
+                                key={project.id}
+                                project={project}
+                                onClick={setSelectedProject}
+                            />
+                        ))}
+                    </div>
+
+                    {hasMore && (
+                        <div className="show-more-container">
+                            <button className="show-more-btn" onClick={handleShowMore}>
+                                <span>Show More Projects</span>
+                                <i data-lucide="chevron-down"></i>
+                            </button>
+                        </div>
+                    )}
+
+                    {selectedProject && (
+                        <ProjectModal
+                            project={selectedProject}
+                            onClose={() => setSelectedProject(null)}
+                        />
+                    )}
+                </>
+            );
+        }
+
+        // ========== STATS COMPONENT ==========
+        function StatsPanel() {
+            // Calculate total projects
+            const totalProjects = projectsData.length;
+
+            // Calculate total duration (convert to hours for accurate calculation)
+            const totalDuration = projectsData.reduce((acc, project) => {
+                // Parse duration string (e.g., "3 weeks", "2 days")
+                const match = project.duration.match(/(\d+(\.\d+)?)\s*(week|day|hour)/i);
+                if (match) {
+                    const value = parseFloat(match[1]);
+                    const unit = match[3].toLowerCase();
+
+                    if (unit.startsWith('week')) return acc + (value * 40); // 40 hours per week
+                    if (unit.startsWith('day')) return acc + (value * 8); // 8 hours per day
+                    if (unit.startsWith('hour')) return acc + value;
+                }
+                return acc;
+            }, 0);
+
+            // Format total duration back to weeks/days
+            const formatDuration = (hours) => {
+                const weeks = Math.floor(hours / 40);
+                const remainingDays = Math.floor((hours % 40) / 8);
+                if (weeks > 0) return `${weeks}+ weeks`;
+                if (remainingDays > 0) return `${remainingDays}+ days`;
+                return `${hours} hours`;
+            };
+
+            // Group projects by software
+            const softwareStats = projectsData.reduce((acc, project) => {
+                acc[project.software] = (acc[project.software] || 0) + 1;
+                return acc;
+            }, {});
+
+            const maxCount = Math.max(...Object.values(softwareStats));
+
+            useEffect(() => {
+                setTimeout(() => {
+                    if (window.lucide) lucide.createIcons();
+                }, 100);
+            }, []);
+
+            return (
+                <div className="stats-section">
+                    <div className="section-header">
+                        <h2 className="section-title">Project Statistics</h2>
+                        <p className="section-subtitle">Quantified engineering journey</p>
+                    </div>
+
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-icon">
+                                <i data-lucide="folder"></i>
+                            </div>
+                            <div className="stat-value">{totalProjects}</div>
+                            <div className="stat-label">Total Projects</div>
+                        </div>
+
+                        <div className="stat-card">
+                            <div className="stat-icon">
+                                <i data-lucide="clock"></i>
+                            </div>
+                            <div className="stat-value">{formatDuration(totalDuration)}</div>
+                            <div className="stat-label">Total Duration</div>
+                        </div>
+
+                        <div className="stat-card">
+                            <div className="stat-icon">
+                                <i data-lucide="cpu"></i>
+                            </div>
+                            <div className="stat-value">{Object.keys(softwareStats).length}</div>
+                            <div className="stat-label">Software Tools</div>
+                        </div>
+                    </div>
+
+                    <div className="software-breakdown">
+                        <h3>Projects by Software</h3>
+                        {Object.entries(softwareStats).map(([software, count]) => (
+                            <div key={software} className="software-item">
+                                <div className="software-header">
+                                    <div className="software-name">
+                                        <i data-lucide="layers"></i>
+                                        {software}
+                                    </div>
+                                    <div className="software-count">{count} project{count > 1 ? 's' : ''}</div>
+                                </div>
+                                <div className="progress-bar">
+                                    <div
+                                        className="progress-fill"
+                                        style={{ width: `${(count / maxCount) * 100}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // ========== MAIN APP COMPONENT ==========
+        function App() {
+            useEffect(() => {
+                // Initialize Lucide icons after initial render
+                setTimeout(() => {
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                }, 100);
+            }, []);
+
+            return (
+                <div className="app-container">
+                    <ProfileSection />
+                    <ProjectsGallery />
+                    <StatsPanel />
+                </div>
+            );
+        }
+
+        // ========== RENDER APP ==========
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
