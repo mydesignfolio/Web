@@ -115,7 +115,14 @@
                 duration: "3 weeks",
                 image: "assets/Design/1.png",
                 thumbnail: "assets/Design/1.png",
-                relatedProjectId: 2
+                relatedProjectId: 2,
+                technicalSpecs: {
+                    material: "Aluminium 6061",
+                    weight: "12.5 kg",
+                    payload: "2.0 kg",
+                    software: "SolidWorks / ANSYS"
+                },
+                downloadLink: "#"
             },
             {
                 id: 2,
@@ -125,7 +132,13 @@
                 duration: "2 weeks",
                 image: "",
                 thumbnail: "",
-
+                technicalSpecs: {
+                    material: "Carbon Fiber Composite",
+                    weight: "450 kg",
+                    payload: "N/A",
+                    software: "ANSYS Fluent"
+                },
+                downloadLink: "#"
             },
             {
                 id: 3,
@@ -135,7 +148,13 @@
                 duration: "4 weeks",
                 image: "",
                 thumbnail: "",
-
+                technicalSpecs: {
+                    material: "Stainless Steel 304",
+                    weight: "8.2 kg",
+                    payload: "5.0 kg",
+                    software: "SolidWorks"
+                },
+                downloadLink: "#"
             },
             {
                 id: 4,
@@ -144,7 +163,14 @@
                 software: "ANSYS",
                 duration: "1 week",
                 image: "",
-                thumbnail: ""
+                thumbnail: "",
+                technicalSpecs: {
+                    material: "Copper / Steel",
+                    weight: "150 kg",
+                    payload: "N/A",
+                    software: "ANSYS Thermal"
+                },
+                downloadLink: "#"
             },
             {
                 id: 5,
@@ -153,7 +179,14 @@
                 software: "SolidWorks",
                 duration: "3 weeks",
                 image: "",
-                thumbnail: ""
+                thumbnail: "",
+                technicalSpecs: {
+                    material: "Chromoly Steel",
+                    weight: "24 kg",
+                    payload: "800 kg",
+                    software: "SolidWorks"
+                },
+                downloadLink: "#"
             },
             {
                 id: 6,
@@ -162,7 +195,14 @@
                 software: "ANSYS",
                 duration: "2 weeks",
                 image: "",
-                thumbnail: ""
+                thumbnail: "",
+                technicalSpecs: {
+                    material: "Structural Steel",
+                    weight: "2500 kg",
+                    payload: "15000 kg",
+                    software: "ANSYS Mechanical"
+                },
+                downloadLink: "#"
             },
             {
                 id: 7,
@@ -171,7 +211,14 @@
                 software: "SolidWorks",
                 duration: "1.5 weeks",
                 image: "",
-                thumbnail: ""
+                thumbnail: "",
+                technicalSpecs: {
+                    material: "Steel 1045",
+                    weight: "35 kg",
+                    payload: "12000 kg",
+                    software: "SolidWorks"
+                },
+                downloadLink: "#"
             },
         ];
 
@@ -310,36 +357,65 @@
                         </div>
 
                         <div className="modal-details">
-                            <h2>{project.title}</h2>
-
-                            <div className="modal-meta">
-                                <div className="modal-meta-item">
-                                    <div className="modal-meta-label">Software Used</div>
-                                    <div className="modal-meta-value">
-                                        <i data-lucide="cpu"></i>
-                                        {project.software}
-                                    </div>
-                                </div>
-
-                                <div className="modal-meta-item">
-                                    <div className="modal-meta-label">Total Duration</div>
-                                    <div className="modal-meta-value">
-                                        <i data-lucide="clock"></i>
-                                        {project.duration}
-                                    </div>
-                                </div>
-
-                                <div className="modal-meta-item">
-                                    <div className="modal-meta-label">Project ID</div>
-                                    <div className="modal-meta-value">
-                                        <i data-lucide="hash"></i>
-                                        {String(project.id).padStart(3, '0')}
-                                    </div>
-                                </div>
+                            <div className="modal-header-row">
+                                <h2>{project.title}</h2>
                             </div>
 
-                            <div className="modal-description">
-                                <p>{project.description}</p>
+                            <div className="modal-layout">
+                                <div className="modal-main-info">
+                                    <div className="modal-meta">
+                                        <div className="modal-meta-item">
+                                            <div className="modal-meta-label">Software Used</div>
+                                            <div className="modal-meta-value">
+                                                <i data-lucide="cpu"></i>
+                                                {project.software}
+                                            </div>
+                                        </div>
+
+                                        <div className="modal-meta-item">
+                                            <div className="modal-meta-label">Total Duration</div>
+                                            <div className="modal-meta-value">
+                                                <i data-lucide="clock"></i>
+                                                {project.duration}
+                                            </div>
+                                        </div>
+
+                                        <div className="modal-meta-item">
+                                            <div className="modal-meta-label">Project ID</div>
+                                            <div className="modal-meta-value">
+                                                <i data-lucide="hash"></i>
+                                                {String(project.id).padStart(3, '0')}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="modal-description">
+                                        <p>{project.description}</p>
+                                    </div>
+                                </div>
+
+                                <div className="modal-sidebar">
+                                    {project.technicalSpecs && (
+                                        <div className="technical-specs">
+                                            <h4 className="specs-title">Technical Specs</h4>
+                                            <div className="specs-list">
+                                                {Object.entries(project.technicalSpecs).map(([key, value]) => (
+                                                    <div className="spec-item" key={key}>
+                                                        <span className="spec-label">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                                                        <span className="spec-value">{value}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {project.downloadLink && (
+                                        <a href={project.downloadLink} className="download-btn" target="_blank" rel="noopener noreferrer">
+                                            <i data-lucide="download"></i>
+                                            Download Drawings (PDF)
+                                        </a>
+                                    )}
+                                </div>
                             </div>
 
                             {relatedProject && (

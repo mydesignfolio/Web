@@ -591,15 +591,114 @@ body {
     gap: 0.5rem;
 }
 
+.modal-meta-value i {
+    color: var(--accent-cyan);
+    width: 18px;
+}
+
 .modal-description {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
+    font-size: 1.05rem;
     line-height: 1.8;
-    margin-top: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.modal-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.modal-main-info {
+    flex: 1;
+}
+
+.modal-sidebar {
+    padding-left: 3rem;
+    border-left: 1px solid var(--border-color);
+}
+
+/* Technical Specs Styling */
+.technical-specs {
+    margin-bottom: 2rem;
+}
+
+.specs-title {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.specs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.spec-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.spec-item:first-child {
+    padding-top: 0;
+}
+
+.spec-item:last-child {
+    border-bottom: none;
+}
+
+.spec-label {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.spec-value {
+    font-family: var(--font-mono);
+    color: var(--accent-cyan);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: right;
+}
+
+/* Download Button - Purple */
+.download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    background: var(--accent-purple);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-family: var(--font-sans);
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+    cursor: none;
+}
+
+.download-btn:hover {
+    background: #9333ea;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.5);
+}
+
+.download-btn i {
+    width: 20px;
+    height: 20px;
 }
 
 /* =========================================
-   STATS PANEL
+   STATS SECTION
    ========================================= */
 .stats-section {
     margin-top: 5rem;
@@ -796,6 +895,32 @@ body {
 
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+
+    .modal-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .modal-sidebar {
+        order: -1;
+        padding-left: 0;
+        border-left: none;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .modal-sidebar {
+        order: -1;
+        padding-left: 0;
+        border-left: none;
+        margin-bottom: 1rem;
     }
 }
 
