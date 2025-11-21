@@ -96,7 +96,7 @@
             email: "timberlis@example.com",
             phone: "+1 234 567 8900",
             location: "City, Country",
-            profileImage: "", // Leave empty for placeholder, or add path to your image
+            profileImage: "assets/Yesh Photo (1).JPG", // Leave empty for placeholder, or add path to your image
             socialLinks: {
                 linkedin: "https://linkedin.com/in/yourprofile",
                 github: "https://github.com/yourprofile",
@@ -113,8 +113,9 @@
                 description: "Designed a high-performance industrial gearbox assembly for heavy machinery applications. The project involved detailed stress analysis, thermal simulation, and optimization for maximum torque transfer efficiency. Utilized advanced meshing techniques and material selection to ensure longevity under extreme operating conditions.",
                 software: "SolidWorks",
                 duration: "3 weeks",
-                image: "",
-                thumbnail: ""
+                image: "assets/Design/1.png",
+                thumbnail: "assets/Design/1.png",
+                relatedProjectId: 2
             },
             {
                 id: 2,
@@ -123,7 +124,8 @@
                 software: "ANSYS",
                 duration: "2 weeks",
                 image: "",
-                thumbnail: ""
+                thumbnail: "",
+
             },
             {
                 id: 3,
@@ -132,7 +134,8 @@
                 software: "SolidWorks",
                 duration: "4 weeks",
                 image: "",
-                thumbnail: ""
+                thumbnail: "",
+
             },
             {
                 id: 4,
@@ -265,7 +268,7 @@
         }
 
         // ========== PROJECT MODAL COMPONENT ==========
-        function ProjectModal({ project, onClose }) {
+        function ProjectModal({ project, isOpen, onClose, onSwitch }) {
             if (!project) return null;
 
             useEffect(() => {
@@ -283,8 +286,13 @@
                 return () => document.removeEventListener('keydown', handleEscape);
             }, [onClose]);
 
+            // Find related project if it exists
+            const relatedProject = project.relatedProjectId
+                ? projectsData.find(p => p.id === project.relatedProjectId)
+                : null;
+
             return (
-                <div className="modal-overlay active" onClick={onClose}>
+                <div className={`modal-overlay ${isOpen ? 'active' : ''}`} onClick={onClose}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="modal-close" onClick={onClose}>
                             <i data-lucide="x"></i>
@@ -333,6 +341,61 @@
                             <div className="modal-description">
                                 <p>{project.description}</p>
                             </div>
+
+                            {relatedProject && (
+                                <div className="related-project-section" style={{ marginTop: '2rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem' }}>
+                                    <h4 style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.9rem', textTransform: 'uppercase' }}>Related Project</h4>
+                                    <button
+                                        className="related-project-link"
+                                        onClick={() => onSwitch(relatedProject)}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '1rem',
+                                            background: 'var(--bg-secondary)',
+                                            border: '1px solid var(--border-color)',
+                                            padding: '1rem',
+                                            borderRadius: '12px',
+                                            width: '100%',
+                                            cursor: 'pointer',
+                                            textAlign: 'left',
+                                            color: 'var(--text-primary)',
+                                            transition: 'all 0.3s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--accent-cyan)';
+                                            e.currentTarget.style.transform = 'translateY(-2px)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--border-color)';
+                                            e.currentTarget.style.transform = 'translateY(0)';
+                                        }}
+                                    >
+                                        <div style={{
+                                            width: '50px',
+                                            height: '50px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            background: 'var(--bg-tertiary)',
+                                            flexShrink: 0
+                                        }}>
+                                            {relatedProject.thumbnail || relatedProject.image ? (
+                                                <img src={relatedProject.thumbnail || relatedProject.image} alt={relatedProject.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            ) : (
+                                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <i data-lucide="box" style={{ color: 'var(--text-muted)' }}></i>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <div style={{ fontWeight: '600', fontSize: '1.1rem', marginBottom: '0.2rem' }}>{relatedProject.title}</div>
+                                            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                                                View Project <i data-lucide="arrow-right" style={{ width: '14px', height: '14px', display: 'inline-block', verticalAlign: 'middle' }}></i>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -343,12 +406,45 @@
         function ProjectsGallery() {
             const [displayCount, setDisplayCount] = useState(6);
             const [selectedProject, setSelectedProject] = useState(null);
+            const [isModalVisible, setIsModalVisible] = useState(false);
 
             const visibleProjects = projectsData.slice(0, displayCount);
             const hasMore = displayCount < projectsData.length;
 
             const handleShowMore = () => {
                 setDisplayCount(prev => Math.min(prev + 6, projectsData.length));
+            };
+
+            const handleOpenProject = (project) => {
+                setSelectedProject(project);
+                // Small delay to allow render before adding active class for transition
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        setIsModalVisible(true);
+                    });
+                });
+            };
+
+            const handleCloseProject = () => {
+                setIsModalVisible(false);
+                // Wait for 1s transition to finish before unmounting
+                setTimeout(() => {
+                    setSelectedProject(null);
+                }, 1000);
+            };
+
+            const handleSwitchProject = (newProject) => {
+                setIsModalVisible(false);
+                // Wait for close animation (1s)
+                setTimeout(() => {
+                    setSelectedProject(newProject);
+                    // Wait a brief moment for render, then open
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            setIsModalVisible(true);
+                        });
+                    });
+                }, 1000);
             };
 
             useEffect(() => {
@@ -370,7 +466,7 @@
                             <ProjectCard
                                 key={project.id}
                                 project={project}
-                                onClick={setSelectedProject}
+                                onClick={handleOpenProject}
                             />
                         ))}
                     </div>
@@ -387,7 +483,9 @@
                     {selectedProject && (
                         <ProjectModal
                             project={selectedProject}
-                            onClose={() => setSelectedProject(null)}
+                            isOpen={isModalVisible}
+                            onClose={handleCloseProject}
+                            onSwitch={handleSwitchProject}
                         />
                     )}
                 </>
